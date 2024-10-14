@@ -1,4 +1,6 @@
 import pygame
+import os
+import pickle
 pygame.init()
 
 
@@ -8,7 +10,7 @@ COLUMNS = 3
 BOARD_WIDTH = 800
 BOARD_HEIGHT = 800
 WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 800
+WINDOW_HEIGHT = 1000
 
 # Images
 IMAGE_BLUE = pygame.transform.scale(pygame.image.load("assets/images/bluecircle.png"), (150, 150))
@@ -20,11 +22,24 @@ START_SOUND = pygame.mixer.Sound('assets/sounds/start.ogg')
 END_SOUND = pygame.mixer.Sound('assets/sounds/end.ogg')
 
 # Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+WHITE = (180, 180, 180)
+BLACK = (50, 50, 50)
 GRAY = (200, 200, 200)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+OVERLAY_ALPHA = 120
 
 # Fonts
 END_FONT = pygame.font.SysFont(name='arial', size=80, bold=True)
+
+# AI Cache
+if os.path.isfile("assets/behavior/ai_cache.pkl"):
+    with open("assets/behavior/ai_cache.pkl", 'rb') as file:
+        ai_cache = pickle.load(file)
+else:
+    ai_cache = {}
+
+
+def save_ai_cache(cache):
+    with open("assets/behavior/ai_cache.pkl", 'wb+') as file:
+        pickle.dump(cache, file)

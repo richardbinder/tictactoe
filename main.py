@@ -1,57 +1,32 @@
-import numpy
 import pygame
 import asyncio
-from src.ai import AI
-from src.window import Window
-from src.board import Board
-from src import resources
+import src.resources as resources
+from src.entity.ai import AI
+from src.render.board_render import BoardRender
+from src.entity.board import Board
+from src.entity.game import Game
+from src.render.game_render import GameRender
 
 pygame.init()
-
-
-def play_move_sound():
-    resources.MOVE_SOUND.play()
-
-
-def play_game_start_sound():
-    resources.START_SOUND.play()
-
-
-def play_game_end_sound():
-    resources.END_SOUND.play()
 
 
 async def main():
     while True:
         game_restart = False
 
-        board = Board(resources.ROWS, resources.COLUMNS, resources.BOARD_WIDTH, resources.BOARD_HEIGHT)
-        window = Window(resources.WINDOW_WIDTH, resources.WINDOW_HEIGHT, board)
-        ai = AI(board)
+        game = Game()
+        game_render = GameRender(game)
+        game.set_game_render(game_render)
 
-        play_game_start_sound()
         while not game_restart:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                if event.type == pygame.MOUSEBUTTONUP:
-                    if not board.state.has_ended:
-                        position = window.get_mouseclick_square()
-                        if position is not None:
-                            board.move(position)
-                            window.render()
-                            play_move_sound()
-                            if not board.state.has_ended:
-                                position = ai.best_move()
-                                board.move(position)
-                                play_move_sound()
-                        if board.state.has_ended:
-                            play_game_end_sound()
-                            pass
-                    else:
-                        game_restart = True
+            event_list = pygame.event.get()
 
-            window.render()
+            for event in event_list:
+                if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and game.board.state.has_ended:
+                    game_restart = True
+
+            game_render.update(event_list)
+            game_render.draw()
 
             await asyncio.sleep(0)
 

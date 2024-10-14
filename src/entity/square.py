@@ -2,10 +2,14 @@ import src.players as players
 
 
 class Square:
-    def __init__(self, x: float, y: float):
-        self.x = x
-        self.y = y
+    def __init__(self, i: float, j: float):
+        self.i = i
+        self.j = j
         self.assignment = players.EMPTY
+        self.square_render = None
+
+    def set_square_render(self, square_render):
+        self.square_render = square_render
 
     def set_player_1(self):
         self.assignment = players.PLAYER_1
@@ -20,7 +24,7 @@ class Square:
         return self.assignment == players.EMPTY
 
     def __str__(self):
-        return f'({self.x}, {self.y}, {self.assignment})'
+        return f'({self.i}, {self.j}, {self.assignment})'
 
 
 def get_common_assignment(square_list: list[Square]):

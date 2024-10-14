@@ -1,56 +1,35 @@
+from typing import Any
+
 import numpy as np
+from numpy import ndarray, dtype
+
 import src.players as players
-import src.square as square
-from src.square import Square
-
-
-class GameState:
-    def __init__(self):
-        self.has_ended = False
-        self.winner = None
-        self.winning_squares = None
-
-    def set_win(self, winner, winning_squares):
-        self.has_ended = True
-        self.winner = winner
-        self.winning_squares = winning_squares
-
-    def set_draw(self):
-        self.has_ended = True
-
-    def set_undecided(self):
-        self.has_ended = False
-        self.winner = None
-        self.winning_squares = None
-
-    def is_win(self):
-        return self.has_ended and self.winner is not None
-
-    def is_draw(self):
-        return self.has_ended and self.winner is None
+import src.entity.square as square
+from src.entity.square import Square
+from src.entity.game_state import GameState
 
 
 class Board:
-    def __init__(self, rows: int, columns: int, width: int, height: int):
+    def __init__(self, rows: int, columns: int):
         self.rows = rows
         self.columns = columns
-        self.width = width
-        self.height = height
         self.turn = players.PLAYER_2
         self.state = GameState()
-
-        dis_to_cen_x = width // columns // 2
-        dis_to_cen_y = height // rows // 2
 
         self.game_array = np.zeros([rows, columns], dtype=Square)
         for i in range(rows):
             for j in range(columns):
-                x = dis_to_cen_x * (2 * j + 1)
-                y = dis_to_cen_y * (2 * i + 1)
+                self.game_array[i, j] = Square(i, j)
 
-                self.game_array[i, j] = Square(x, y)
+        self.board_render = None
 
-    def get_rows(self) -> list[list[Square]]:
+    def set_board_render(self, board_render):
+        self.board_render = board_render
+
+    def get_all(self) -> ndarray[Square, dtype[Square]]:
+        return self.game_array.flatten()
+
+    def get_rows(self) -> ndarray[ndarray[Square], dtype[Square]]:
         return self.game_array
 
     def get_columns(self) -> list[list[Square]]:
@@ -110,7 +89,7 @@ class Board:
         return all(not self.get(i, j).is_empty() for i in range(self.rows) for j in range(self.columns))
 
     def deep_copy(self):
-        copy = Board(self.rows, self.columns, self.width, self.height)
+        copy = Board(self.rows, self.columns)
         copy.turn = self.turn
         copy.game_array = self.game_array
         copy.state = GameState()

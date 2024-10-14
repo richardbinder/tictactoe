@@ -1,20 +1,19 @@
 import math
 import src.players as players
-from src.square import Square
-from src.board import Board
-
-
-cache = {}
+import src.resources as resources
+from src.entity.square import Square
+from src.entity.board import Board
 
 
 class AI:
     def __init__(self, board: Board):
         self.board_original = board
         self.board = board.deep_copy()
+        self.cache = resources.ai_cache
 
     def minimax(self, is_maximizing):
-        if str(self.board) in cache:
-            return cache[str(self.board)]
+        if str(self.board) in self.cache:
+            return self.cache[str(self.board)]
 
         winner = self.board.state.winner
         if winner == players.PLAYER_1:
@@ -33,7 +32,7 @@ class AI:
                         score = self.minimax(False)
                         self.board.undo_move(self.board.get(i, j))
                         best_score = max(score, best_score)
-            cache[str(self.board)] = best_score
+            self.cache[str(self.board)] = best_score
             return best_score
         else:
             best_score = math.inf
@@ -44,7 +43,7 @@ class AI:
                         score = self.minimax(True)
                         self.board.undo_move(self.board.get(i, j))
                         best_score = min(score, best_score)
-            cache[str(self.board)] = best_score
+            self.cache[str(self.board)] = best_score
             return best_score
 
     def best_move(self) -> Square:
@@ -61,4 +60,6 @@ class AI:
                     if score > best_score:
                         best_score = score
                         position = self.board_original.get(i, j)
+
+        resources.save_ai_cache(self.cache)
         return position
