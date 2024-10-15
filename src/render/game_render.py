@@ -64,10 +64,14 @@ class GameRender(Sprite):
         self.game.move(square)
 
     def update(self, event_list: list[Event]):
+        game_restart = False
         for event in event_list:
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1 and self.game.board.state.has_ended:
-                self.game.restart()
+                game_restart = True
 
         pygame.sprite.Group([self.board_render] + self.buttons).update(event_list)
+
+        if game_restart:
+            self.game.restart()
