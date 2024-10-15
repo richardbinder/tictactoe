@@ -1,11 +1,8 @@
-import numpy as np
 import pygame
-import math
-import warnings
+from pygame.sprite import Sprite
+
 import src.players as players
 import src.resources as resources
-from pygame.sprite import Sprite
-from src.entity.game import Game
 from src.entity.board import Board
 from src.render.square_render import SquareRender
 

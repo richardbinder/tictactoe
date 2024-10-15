@@ -1,9 +1,9 @@
 import pygame
+from pygame.sprite import Sprite
+
 import src.players as players
 import src.resources as resources
-from pygame.sprite import Sprite
 from src.entity.square import Square
-from src.entity.game import Game
 
 
 class SquareRender(Sprite):
@@ -13,16 +13,17 @@ class SquareRender(Sprite):
         square.set_square_render(self)
         self.board_render = parent
 
-        self.x_rel = width * square.i
-        self.y_rel = height * square.j
+        border = 20
+        self.x_rel = width * square.i + border//2
+        self.y_rel = height * square.j + border//2
         self.x = self.x_rel + parent.x
         self.y = self.y_rel + parent.y
         self.x_rel_center = self.x_rel + width // 2
         self.y_rel_center = self.y_rel + height // 2
 
-        self.original_image = pygame.Surface((width-10, height-10), pygame.SRCALPHA)
+        self.original_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
         self.original_image.fill(resources.WHITE)
-        self.click_image = pygame.Surface((width-10, height-10), pygame.SRCALPHA)
+        self.click_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
         self.click_image.fill(resources.WHITE)
         self.image = self.original_image
         self.rect = self.image.get_rect(topleft=(self.x_rel, self.y_rel))

@@ -27,9 +27,11 @@ BLACK = (50, 50, 50)
 GRAY = (200, 200, 200)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+LIGHT_BLUE = (100, 100, 255)
 OVERLAY_ALPHA = 120
 
 # Fonts
+BUTTON_FONT = pygame.font.SysFont(name='arial', size=30, bold=True)
 END_FONT = pygame.font.SysFont(name='arial', size=80, bold=True)
 
 # AI Cache

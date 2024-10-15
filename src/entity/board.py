@@ -1,12 +1,7 @@
-from typing import Any
-
-import numpy as np
-from numpy import ndarray, dtype
-
-import src.players as players
 import src.entity.square as square
-from src.entity.square import Square
+import src.players as players
 from src.entity.game_state import GameState
+from src.entity.square import Square
 
 
 class Board:
@@ -16,20 +11,25 @@ class Board:
         self.turn = players.PLAYER_2
         self.state = GameState()
 
-        self.game_array = np.zeros([rows, columns], dtype=Square)
+        self.game_array = []
         for i in range(rows):
+            self.game_array.append([])
             for j in range(columns):
-                self.game_array[i, j] = Square(i, j)
+                self.game_array[i].append(Square(i, j))
 
         self.board_render = None
 
     def set_board_render(self, board_render):
         self.board_render = board_render
 
-    def get_all(self) -> ndarray[Square, dtype[Square]]:
-        return self.game_array.flatten()
+    def get_all(self) -> [Square]:
+        all_squares = []
+        for row in self.game_array:
+            for s in row:
+                all_squares.append(s)
+        return all_squares
 
-    def get_rows(self) -> ndarray[ndarray[Square], dtype[Square]]:
+    def get_rows(self) -> [[Square]]:
         return self.game_array
 
     def get_columns(self) -> list[list[Square]]:
@@ -73,12 +73,12 @@ class Board:
             self.state.set_undecided()
 
     def get_winner(self) -> (int, list[Square]):
-        main_diagonal = np.array([self.get(0, 0), self.get(1, 1), self.get(2, 2)])
-        reverse_diagonal = np.array([self.get(0, 2), self.get(1, 1), self.get(2, 0)])
+        main_diagonal = [self.get(0, 0), self.get(1, 1), self.get(2, 2)]
+        reverse_diagonal = [self.get(0, 2), self.get(1, 1), self.get(2, 0)]
         rows = self.get_rows()
         columns = self.get_columns()
 
-        for squares in np.vstack((rows, columns, main_diagonal, reverse_diagonal)):
+        for squares in rows + columns + [main_diagonal, reverse_diagonal]:
             common = square.get_common_assignment(squares)
             if common is not None:
                 return common, squares
@@ -96,5 +96,8 @@ class Board:
         return copy
 
     def __str__(self):
-        return np.array2string(self.game_array, formatter={'all': lambda x: str(x)})
+        array_str = ""
+        for s in self.get_all():
+            array_str += str(s) + ","
+        return array_str
 
