@@ -23,11 +23,24 @@ class SquareRender(Sprite):
 
         self.original_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
         self.original_image.fill(resources.WHITE)
+
         self.click_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
         self.click_image.fill(resources.WHITE)
+
+        self.highlight_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
+        self.highlight_image.fill(resources.LIGHT_GRAY)
+
         self.image = self.original_image
         self.rect = self.image.get_rect(topleft=(self.x_rel, self.y_rel))
-        self.clicked = False
+
+    def set_image(self, is_highlight):
+        if self.square.is_empty():
+            if is_highlight:
+                self.image = self.highlight_image
+            else:
+                self.image = self.original_image
+        else:
+            self.image = self.click_image
 
     def update_render(self):
         if not self.square.is_empty():
@@ -41,4 +54,11 @@ class SquareRender(Sprite):
                 pos_rel = (event.pos[0] - self.board_render.x, event.pos[1] - self.board_render.y)
                 if self.rect.collidepoint(pos_rel):
                     self.board_render.move(self.square)
+            if event.type == pygame.MOUSEMOTION:
+                pos_rel = (event.pos[0] - self.board_render.x, event.pos[1] - self.board_render.y)
+                if self.rect.collidepoint(pos_rel):
+                    self.board_render.game_render.cursor = pygame.SYSTEM_CURSOR_HAND
+                    self.set_image(True)
+                else:
+                    self.set_image(False)
 

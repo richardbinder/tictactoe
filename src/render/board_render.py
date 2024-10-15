@@ -65,8 +65,6 @@ class BoardRender(Sprite):
         self.game_render.move(square)
 
     def update(self, event_list):
-        for event in event_list:
-            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                if not self.board.state.has_ended:
-                    pygame.sprite.Group(self.squares).update(event_list)
+        if not self.board.state.has_ended:
+            pygame.sprite.Group(self.squares).update(event_list)
         self.update_render()

@@ -23,11 +23,14 @@ END_SOUND = pygame.mixer.Sound('assets/sounds/end.ogg')
 
 # Colors
 WHITE = (180, 180, 180)
+LIGHT_GRAY = (150, 150, 150)
+BLACKER = (30, 30, 30)
 BLACK = (50, 50, 50)
 GRAY = (200, 200, 200)
 RED = (255, 0, 0)
-BLUE = (0, 0, 255)
+BLUE = (70, 70, 255)
 LIGHT_BLUE = (100, 100, 255)
+DARK_BLUE = (0, 0, 100)
 OVERLAY_ALPHA = 120
 
 # Fonts

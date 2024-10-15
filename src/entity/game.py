@@ -7,7 +7,7 @@ from src.difficulty import Difficulty
 class Game:
     def __init__(self):
         self.board = Board(resources.ROWS, resources.COLUMNS)
-        self.ai = AI(self.board, Difficulty.UNLOSABLE)
+        self.ai = AI(self.board, Difficulty.NORMAL)
         self.game_render = None
 
     def set_game_render(self, game_render):
