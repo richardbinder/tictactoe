@@ -8,17 +8,18 @@ from src.render.square_render import SquareRender
 
 
 class BoardRender(Sprite):
-    def __init__(self, parent: any, board: Board, width: int, height: int, offset: int):
+    def __init__(self, parent: any, board: Board, width: int, height: int, offset_x: int, offset_y: int):
         super().__init__()
-        self.game_render = parent
+        self.parent = parent
 
         self.width = width
         self.height = height
-        self.offset = offset
         self.board = board
 
-        self.x = 0
-        self.y = offset
+        self.x_rel = offset_x
+        self.y_rel = offset_y
+        self.x = self.x_rel + self.parent.x_board
+        self.y = self.y_rel + self.parent.y_board
 
         square_width = self.width // self.board.columns
         square_height = self.height // self.board.rows
@@ -28,15 +29,10 @@ class BoardRender(Sprite):
             self.squares.append(square_render)
 
         self.image = pygame.Surface((width, height), pygame.SRCALPHA)
-        self.rect = self.image.get_rect(topleft=(self.x, self.y))
-
-    def display_message(self, content):
-        end_text = resources.END_FONT.render(content, 1, resources.BLACK)
-        self.image.blit(end_text, ((self.width - end_text.get_width()) // 2, (self.width - end_text.get_height()) // 2))
-        pygame.display.update()
+        self.rect = self.image.get_rect(topleft=(self.x_rel, self.y_rel))
 
     def update_render(self):
-        self.image.fill(resources.BLACK)
+        self.image.fill(resources.WHITE)
         pygame.sprite.Group(self.squares).draw(self.image)
 
         if self.board.state.has_ended:
@@ -47,22 +43,11 @@ class BoardRender(Sprite):
             winning_squares = [s.square_render for s in self.board.state.winning_squares]
             previous_square = winning_squares[0]
             for s in winning_squares[1:]:
-                pygame.draw.line(self.image, resources.BLACK, (previous_square.x_rel_center, previous_square.y_rel_center), (s.x_rel_center, s.y_rel_center), 12)
+                pygame.draw.line(self.image, resources.RED, (previous_square.x_rel_center, previous_square.y_rel_center), (s.x_rel_center, s.y_rel_center), 12)
                 previous_square = s
-            self.draw_transparent_overlay()
-            self.display_message(players.CHAR_MAP[self.board.state.winner] + " has won!")
-        if self.board.state.is_draw():
-            self.draw_transparent_overlay()
-            self.display_message("It's a draw!")
-
-    def draw_transparent_overlay(self):
-        game_over_screen_fade = pygame.Surface((self.width, self.height))
-        game_over_screen_fade.fill(resources.WHITE)
-        game_over_screen_fade.set_alpha(resources.OVERLAY_ALPHA)
-        self.image.blit(game_over_screen_fade, (0, 0))
 
     def move(self, square):
-        self.game_render.move(square)
+        self.parent.move(square)
 
     def update(self, event_list):
         if not self.board.state.has_ended:

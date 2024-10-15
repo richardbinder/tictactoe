@@ -11,9 +11,9 @@ class SquareRender(Sprite):
         super().__init__()
         self.square = square
         square.set_square_render(self)
-        self.board_render = parent
+        self.parent = parent
 
-        border = 20
+        border = 40
         self.x_rel = width * square.i + border//2
         self.y_rel = height * square.j + border//2
         self.x = self.x_rel + parent.x
@@ -28,7 +28,8 @@ class SquareRender(Sprite):
         self.click_image.fill(resources.WHITE)
 
         self.highlight_image = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
-        self.highlight_image.fill(resources.LIGHT_GRAY)
+        pygame.draw.circle(self.highlight_image, resources.LIGHT_GRAY, (self.highlight_image.get_width()//2, self.highlight_image.get_height()//2), self.highlight_image.get_height() // 2)
+        # self.highlight_image.fill(resources.LIGHT_GRAY)
 
         self.image = self.original_image
         self.rect = self.image.get_rect(topleft=(self.x_rel, self.y_rel))
@@ -51,13 +52,13 @@ class SquareRender(Sprite):
     def update(self, event_list):
         for event in event_list:
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                pos_rel = (event.pos[0] - self.board_render.x, event.pos[1] - self.board_render.y)
+                pos_rel = (event.pos[0] - self.parent.x, event.pos[1] - self.parent.y)
                 if self.rect.collidepoint(pos_rel):
-                    self.board_render.move(self.square)
+                    self.parent.move(self.square)
             if event.type == pygame.MOUSEMOTION:
-                pos_rel = (event.pos[0] - self.board_render.x, event.pos[1] - self.board_render.y)
+                pos_rel = (event.pos[0] - self.parent.x, event.pos[1] - self.parent.y)
                 if self.rect.collidepoint(pos_rel):
-                    self.board_render.game_render.cursor = pygame.SYSTEM_CURSOR_HAND
+                    self.parent.parent.cursor = pygame.SYSTEM_CURSOR_HAND
                     self.set_image(True)
                 else:
                     self.set_image(False)

@@ -5,7 +5,7 @@ from pygame.sprite import Sprite
 
 
 class ButtonRender(Sprite):
-    def __init__(self, parent: any, width: int, height: int, x_offset: int, y_offset: int, text: str, fnc: Callable):
+    def __init__(self, parent: any, x_offset: int, y_offset: int, text_img, fnc: Callable):
         super().__init__()
         self.parent = parent
         self.fnc = fnc
@@ -14,22 +14,25 @@ class ButtonRender(Sprite):
         self.x = x_offset + border//2
         self.y = y_offset + border//2
 
+        self.width = resources.BUTTON_WIDTH - border
+        self.height = resources.BUTTON_HEIGHT - border
+
         self.active = False
 
-        self.image_inactive = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
+        self.image_inactive = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.image_inactive.fill(resources.LIGHT_BLUE)
-        text_object_inactive = resources.BUTTON_FONT.render(text, False, resources.BLACKER)
-        self.image_inactive.blit(text_object_inactive, ((width-border)//2 - text_object_inactive.get_width() // 2, (height-border)//2 - text_object_inactive.get_height() // 2))
+        # text_object_inactive = resources.BUTTON_FONT.render(text, False, resources.BLACKER)
+        self.image_inactive.blit(text_img, (self.width//2 - text_img.get_width() // 2, self.height//2 - text_img.get_height() // 2))
 
-        self.image_active = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
+        self.image_active = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.image_active.fill(resources.DARK_BLUE)
-        text_object_active = resources.BUTTON_FONT.render(text, False, resources.WHITE)
-        self.image_active.blit(text_object_active, ((width-border)//2 - text_object_active.get_width() // 2, (height-border)//2 - text_object_active.get_height() // 2))
+        # text_object_active = resources.BUTTON_FONT.render(text, False, resources.WHITE)
+        self.image_active.blit(text_img, (self.width//2 - text_img.get_width() // 2, self.height//2 - text_img.get_height() // 2))
 
-        self.image_highlight = pygame.Surface((width-border, height-border), pygame.SRCALPHA)
+        self.image_highlight = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         self.image_highlight.fill(resources.BLUE)
-        text_object_highlight = resources.BUTTON_FONT.render(text, False, resources.BLACKER)
-        self.image_highlight.blit(text_object_highlight, ((width-border)//2 - text_object_active.get_width() // 2, (height-border)//2 - text_object_active.get_height() // 2))
+        # text_object_highlight = resources.BUTTON_FONT.render(text, False, resources.BLACKER)
+        self.image_highlight.blit(text_img, (self.width//2 - text_img.get_width() // 2, self.height//2 - text_img.get_height() // 2))
 
         self.image = self.image_inactive
         self.rect = self.image_inactive.get_rect(topleft=(self.x, self.y))
