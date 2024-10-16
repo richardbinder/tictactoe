@@ -24,7 +24,7 @@ IMAGE_BLUE = pygame.transform.scale(pygame.image.load("assets/images/bluecircle.
 IMAGE_GREEN = pygame.transform.scale(pygame.image.load("assets/images/greencircle.png"), (150, 150))
 GRID = pygame.transform.scale(pygame.image.load("assets/images/grid.png"), (BOARD_WIDTH+BOARD_BORDER, BOARD_HEIGHT+BOARD_BORDER))
 UNBEATABLE = pygame.transform.scale(pygame.image.load("assets/images/unbeatable.png"), (260, 110))
-UNLOSABLE = pygame.transform.scale(pygame.image.load("assets/images/unlosable.png"), (230, 120))
+UNLOSABLE = pygame.transform.scale(pygame.image.load("assets/images/unlosable2.png"), (230, 60))
 NORMAL = pygame.transform.scale(pygame.image.load("assets/images/normal.png"), (200, 100))
 
 # Sounds
