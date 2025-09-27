@@ -64,7 +64,7 @@ class GameRender(Sprite):
         self.board_render = BoardRender(self, self.game.board, resources.BOARD_WIDTH, resources.BOARD_HEIGHT, self.board_offset_x, self.board_offset_y)
 
     def play_game_end_sound(self):
-        #resources.END_SOUND.play()
+        resources.END_SOUND.play()
 
     def play_move_sound(self):
         resources.MOVE_SOUND.play()
